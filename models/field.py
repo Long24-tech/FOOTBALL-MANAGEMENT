@@ -1,20 +1,20 @@
-class Field:
+# Đóng gói toàn bộ thông tin
+class field:
     def __init__(self, field_id, name, location, size, hourly_rate):
-        # Encapsulation (Đóng gói dữ liệu với dấu gạch dưới để bảo vệ thuộc tính)
         self._field_id = field_id
         self._name = name
         self._location = location
         self._size = size
         self._hourly_rate = hourly_rate
-        self._is_available = True  # Mặc định sân mới tạo sẽ trống
+        self._is_available = True  #Mới tạo để trống
 
-    # Các hàm @property để lấy dữ liệu ra (Getter) theo đúng yêu cầu tuần 2
+    # CÁC HÀM GETTER (@property) - Cho phép xem dữ liệu, cấm tự ý sửa bừa
     @property
     def field_id(self):
         return self._field_id
 
     @property
-    def name(self):
+    def name(self): #tên sân
         return self._name
 
     @property
@@ -26,14 +26,28 @@ class Field:
         return self._size
 
     @property
-    def hourly_rate(self):
+    def hourly_rate(self): #giá thuê theo giờ
         return self._hourly_rate
 
     @property
-    def is_available(self):
+    def is_available(self): #True là trống, False là bj đặt
         return self._is_available
 
-    # Hàm hiển thị thông tin sân bóng khi in ra màn hình dạng chữ
+    def book_field(self):
+        if self._is_available:
+            self._is_available = False
+            return True
+        return False
+
+    def release_field(self):
+        self._is_available = True
+
+    def to_file_string(self):
+        return f"{self._field_id}|{self._name}|{self._location}|{self._size}|{self._hourly_rate}|{self._is_available}"
+
     def __str__(self):
-        status = "Trống" if self._is_available else "Đã được đặt"
-        return f"Mã Sân: {self._field_id} | Tên: {self._name} | Vị trí: {self._location} | Kích thước: {self._size} | Giá: {self._hourly_rate}k/h | Trạng thái: {status}"
+        if self._is_available == True:
+            status = "Trống"
+        else:
+            status = "Đã được đặt"
+        return f"[{self._field_id}] {self._name} | Vị trí: {self._location} | Loại sân: Sân {self._size} | Giá: {self._hourly_rate}k/h | Trạng thái: {status}"
