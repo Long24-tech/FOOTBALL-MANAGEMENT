@@ -6,8 +6,8 @@ class Booking:
         self._customer_name = customer_name
         self._booking_date = booking_date
         self._booking_time = booking_time
-        self._hours = hours
-        self._total_price = 0.0  # Mới tạo đơn thì tổng tiền để tạm bằng 0, lát sẽ tính sau
+        self.hours = hours
+        self.total_price = 0.0
 
     @property
     def booking_id(self):
@@ -33,15 +33,27 @@ class Booking:
     def hours(self):
         return self._hours
 
+    @hours.setter
+    def hours(self, gia_tri_moi):
+        if gia_tri_moi <= 0:
+            raise ValueError("LỖI: Thời lượng thuê sân phải lớn hơn 0!")
+        self._hours = gia_tri_moi
+
     @property
     def total_price(self):
         return self._total_price
 
+    @total_price.setter
+    def total_price(self, gia_tri_moi):
+        if gia_tri_moi < 0:
+            raise ValueError("LỖI: Tổng tiền không được phép là số âm!")
+        self._total_price = gia_tri_moi
+
     def calculate_total(self, hourly_rate):
-        self._total_price = self._hours * hourly_rate
+        self.total_price = self._hours * hourly_rate
         return self._total_price
 
-    def to_file_string(self): #tách thông tin lưu file .txt
+    def to_file_string(self): 
         return f"{self._booking_id}|{self._field_id}|{self._customer_name}|{self._booking_date}|{self._booking_time}|{self._hours}|{self._total_price}"
 
     def __str__(self):
