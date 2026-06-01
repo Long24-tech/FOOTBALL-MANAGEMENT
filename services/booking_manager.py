@@ -23,7 +23,7 @@ class BookingManager:
         don_moi.calculate_total(gia_cua_san)
 
         self.bookings.append(don_moi) 
-        san_can_thue.is_available = False 
+        san_can_thue.book_field()
         print(f"ĐẶT SÂN THÀNH CÔNG! Hóa đơn chi tiết:")
         print(don_moi) 
     
@@ -36,7 +36,7 @@ class BookingManager:
                 san_dang_thue = self.field_manager.find_field_by_id(ma_san)
                 
                 if san_dang_thue is not None:
-                    san_dang_thue.is_available = True
+                    san_dang_thue.release_field()
                 
                 self.bookings.remove(don)
                 
