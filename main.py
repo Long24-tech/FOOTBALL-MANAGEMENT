@@ -60,7 +60,7 @@ def main():
             print("\n👋 Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
             break
         else:
-            print("❌ Lựa chọn không hợp lệ! Vui lòng nhập lại từ 0 đến 5.")
+            print("Lựa chọn không hợp lệ! Vui lòng nhập lại từ 0 đến 5.")
 
 if __name__ == "__main__":
     main()
