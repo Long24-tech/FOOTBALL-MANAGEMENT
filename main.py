@@ -57,7 +57,7 @@ def main():
             booking_sys.cancel_booking(b_id)
 
         elif lua_chon == "0":
-            print("\n👋 Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
+            print("\n Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
             break
         else:
             print("Lựa chọn không hợp lệ! Vui lòng nhập lại từ 0 đến 5.")
