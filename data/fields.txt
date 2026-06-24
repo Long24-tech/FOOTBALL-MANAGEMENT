@@ -1,0 +1,2 @@
+S05|san my dinh|B|14|2000000.0|True
+S04|san my dinh1|A|14|2000000.0|True
