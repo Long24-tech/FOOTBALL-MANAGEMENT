@@ -23,7 +23,7 @@ def hien_thi_menu():
 def main():
     field_sys = FieldManager()
     booking_sys = BookingManager(field_sys)
-    print("⏳ Đang kiểm tra và nạp dữ liệu từ kho lưu trữ...")
+    print("Đang kiểm tra và nạp dữ liệu từ kho lưu trữ...")
 
     try:
         raw_fields = FileHandler.load_from_file("data/fields.txt")
@@ -49,7 +49,7 @@ def main():
 
     while True:
         hien_thi_menu()
-        lua_chon = input("👉 Mời bạn chọn chức năng (0-5): ").strip()
+        lua_chon = input("Mời bạn chọn chức năng (0-5): ").strip()
 
         if lua_chon == "1":
             print("\n--- CHỨC NĂNG: THÊM SÂN BÓNG MỚI ---")
@@ -61,11 +61,11 @@ def main():
                 price = Validator.validate_price(input("Nhập giá thuê/giờ: "))
 
                 field_sys.add_field(f_id, name, loc, size, price)
-                print(f"✅ Đã thêm sân '{name}' thành công!")
+                print(f"Đã thêm sân '{name}' thành công!")
                 FileHandler.save_to_file("data/fields.txt", field_sys._fields)
-                print("💾 [Auto-Save] Dữ liệu ổ cứng đã được cập nhật!")
+                print("[Auto-Save] Dữ liệu ổ cứng đã được cập nhật!")
             except ValueError as e:
-                print(f"❌ LỖI NHẬP LIỆU: {e}")
+                print(f"LỖI NHẬP LIỆU: {e}")
 
         elif lua_chon == "2":
             field_sys.display_fields()
@@ -82,9 +82,9 @@ def main():
 
                 thanh_cong = booking_sys.book_field(b_id, f_id, cust, date_val, time_val, hours)
                 if thanh_cong:
-                    print("✅ Đặt sân thành công! Hãy kiểm tra lại danh sách hóa đơn.")
+                    print("Đặt sân thành công! Hãy kiểm tra lại danh sách hóa đơn.")
             except ValueError as e:
-                print(f"❌ LỖI NHẬP LIỆU: {e}")
+                print(f"LỖI NHẬP LIỆU: {e}")
 
         elif lua_chon == "4":
             booking_sys.display_bookings()
@@ -95,22 +95,21 @@ def main():
                 b_id = Validator.validate_id(input("Nhập mã hóa đơn cần hủy: "), "Mã hóa đơn")
                 thanh_cong = booking_sys.cancel_booking(b_id)
                 if thanh_cong:
-                    print("✅ Hủy đơn thành công! Sân đã được giải phóng.")
+                    print("Hủy đơn thành công! Sân đã được giải phóng.")
             except ValueError as e:
-                print(f"❌ LỖI NHẬP LIỆU: {e}")
+                print(f"LỖI NHẬP LIỆU: {e}")
 
         elif lua_chon == "0":
             print("\nĐang tiến hành lưu trữ dữ liệu...")
-            # 💾 Gọi FileHandler để cất dữ liệu vào ổ cứng trước khi đóng cửa
             FileHandler.save_to_file("data/fields.txt", field_sys._fields)
             FileHandler.save_to_file("data/bookings.txt", booking_sys.bookings)
 
-            print("💾 Đã tự động lưu toàn bộ dữ liệu an toàn vào thư mục 'data/'.")
-            print("👋 Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
+            print("Đã tự động lưu toàn bộ dữ liệu an toàn vào thư mục 'data/'.")
+            print("Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
             break
 
         else:
-            print("❌ Lựa chọn không hợp lệ. Vui lòng nhập số từ 0 đến 5!")
+            print("Lựa chọn không hợp lệ. Vui lòng nhập số từ 0 đến 5!")
 
 if __name__ == "__main__":
     main()
