@@ -34,10 +34,10 @@ class Validator:
         return price
 
     @staticmethod
-    def validate_size(value: str | float | int) -> float:
+    def validate_size(value: str | float | int) -> int:
         """Validate field size. Size must be a positive number."""
         try:
-            size = float(value)
+            size = int(value)
         except (TypeError, ValueError):
             raise ValueError("Size must be a number.")
 

@@ -4,10 +4,6 @@ import os
 
 
 class FileHandler:
-    """
-    Lớp xử lý đọc/ghi file đơn giản.
-    """
-
     @staticmethod
     def save_to_file(file_path, data_list):
         """

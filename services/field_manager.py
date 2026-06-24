@@ -5,14 +5,13 @@ class FieldManager:
         self._fields = []
 
     def add_field(self, field_id, name, location, size, hourly_rate):
-        for f in self._fields:
-            if f.field_id == field_id:
-                print(f"Lỗi: Mã sân {field_id} đã tồn tại trong hệ thống!")
-                return False
+        field_id = field_id.upper()
+        for san in self._fields:
+            if san._field_id == field_id:
+                raise ValueError(f"Mã sân '{field_id}' đã tồn tại! Vui lòng nhập mã khác.")
 
         new_field = field(field_id, name, location, size, hourly_rate)
         self._fields.append(new_field)
-        print(f"Đã thêm sân [{field_id}] {name} thành công.")
         return True
 
     def display_fields(self):
@@ -26,7 +25,7 @@ class FieldManager:
 
     def find_field_by_id(self, field_id): #tìm kiếm sân theo mã sân
         for f in self._fields:
-            if f.field_id == field_id:
+            if f._field_id == field_id:
                 return f
         return None
 

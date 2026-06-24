@@ -1,22 +1,15 @@
 import os
-
-# --- IMPORT KHUÔN ĐÚC (MODELS) ---
-# (Lưu ý: Nếu tên class trong file của bạn viết hoa là Field/Booking thì nhớ sửa lại cho khớp nhé)
 from models.field import field
 from models.booking import Booking
-
-# --- IMPORT BỘ QUẢN LÝ (SERVICES) ---
 from services.field_manager import FieldManager
 from services.booking_manager import BookingManager
-
-# --- IMPORT CÔNG CỤ HỖ TRỢ (UTILS) ---
 from utils.Validator import Validator
 from utils.file_handler import FileHandler
 
 
 def hien_thi_menu():
     print("\n" + "=" * 45)
-    print("⚽ HỆ THỐNG QUẢN LÝ SÂN BÓNG ĐÁ MINI ⚽")
+    print("HỆ THỐNG QUẢN LÝ SÂN BÓNG ĐÁ MINI")
     print("=" * 45)
     print("1. Thêm sân bóng mới")
     print("2. Hiển thị danh sách sân bóng")
@@ -28,43 +21,32 @@ def hien_thi_menu():
 
 
 def main():
-    # 1. KHỞI TẠO BỘ MÁY QUẢN LÝ
     field_sys = FieldManager()
     booking_sys = BookingManager(field_sys)
-
-    # =====================================================================
-    # 📥 GIAI ĐOẠN NẠP DỮ LIỆU TỪ Ổ CỨNG KHI VỪA MỞ APP
-    # =====================================================================
     print("⏳ Đang kiểm tra và nạp dữ liệu từ kho lưu trữ...")
 
     try:
-        # --- Nạp danh sách Sân Bóng ---
         raw_fields = FileHandler.load_from_file("data/fields.txt")
         for line in raw_fields:
             parts = line.strip().split("|")
             if len(parts) >= 6:
-                # Đúc lại sân: id, name, loc, size (int), price (float)
                 f = field(parts[0], parts[1], parts[2], int(parts[3]), float(parts[4]))
                 f._is_available = (parts[5] == "True")
                 field_sys._fields.append(f)
 
-        # --- Nạp danh sách Hóa Đơn ---
         raw_bookings = FileHandler.load_from_file("data/bookings.txt")
         for line in raw_bookings:
             parts = line.strip().split("|")
             if len(parts) >= 6:
-                # Đúc lại bill: b_id, f_id, cust, date, time, hours (float)
                 b = booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]))
-                booking_sys.bookings.append(b)
+                booking_sys.Bookings.append(b)
 
-        print(f"✅ Đã nạp thành công {len(field_sys._fields)} sân bóng và {len(booking_sys.bookings)} hóa đơn!")
+        print(f"Đã nạp thành công {len(field_sys._fields)} sân bóng và {len(booking_sys.bookings)} hóa đơn!")
     except Exception as e:
-        print(f"⚠️ Dữ liệu trống hoặc có lỗi khi nạp file: {e}")
+        print(f"Dữ liệu trống hoặc có lỗi khi nạp file: {e}")
 
-    print("🚀 Hệ thống đã khởi động thành công!")
-    # =====================================================================
+    print("Hệ thống đã khởi động thành công!")
 
-    # 2. VÒNG LẶP CHƯƠNG TRÌNH CHÍNH (MENU)
     while True:
         hien_thi_menu()
         lua_chon = input("👉 Mời bạn chọn chức năng (0-5): ").strip()
@@ -72,7 +54,6 @@ def main():
         if lua_chon == "1":
             print("\n--- CHỨC NĂNG: THÊM SÂN BÓNG MỚI ---")
             try:
-                # Cho mọi input đi qua máy quét Validator
                 f_id = Validator.validate_id(input("Nhập mã sân (VD: S01): "), "Mã sân")
                 name = Validator.validate_non_empty(input("Nhập tên sân: "), "Tên sân")
                 loc = Validator.validate_non_empty(input("Nhập khu vực (VD: Khu A): "), "Khu vực")
@@ -81,6 +62,8 @@ def main():
 
                 field_sys.add_field(f_id, name, loc, size, price)
                 print(f"✅ Đã thêm sân '{name}' thành công!")
+                FileHandler.save_to_file("data/fields.txt", field_sys._fields)
+                print("💾 [Auto-Save] Dữ liệu ổ cứng đã được cập nhật!")
             except ValueError as e:
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
@@ -129,7 +112,5 @@ def main():
         else:
             print("❌ Lựa chọn không hợp lệ. Vui lòng nhập số từ 0 đến 5!")
 
-
-# Cầu nối để chạy file
 if __name__ == "__main__":
     main()
