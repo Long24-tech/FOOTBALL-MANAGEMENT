@@ -36,7 +36,7 @@ def main():
         for line in raw_bookings:
             parts = line.strip().split("|")
             if len(parts) >= 6:
-                b = booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]))
+                b = Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]))
                 booking_sys.Bookings.append(b)
 
         print(f"Đã nạp thành công {len(field_sys._fields)} sân bóng và {len(booking_sys.bookings)} hóa đơn!")
