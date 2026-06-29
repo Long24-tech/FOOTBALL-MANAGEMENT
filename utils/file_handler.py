@@ -1,16 +1,7 @@
-# utils/file_handler.py
-
 import os
-
-
 class FileHandler:
     @staticmethod
     def save_to_file(file_path, data_list):
-        """
-        Ghi danh sách object ra file.
-        Mỗi object phải có hàm to_file_string().
-        """
-        # Tạo thư mục cha nếu chưa tồn tại
         folder = os.path.dirname(file_path)
         if folder and not os.path.exists(folder):
             os.makedirs(folder)
@@ -28,10 +19,6 @@ class FileHandler:
 
     @staticmethod
     def load_from_file(file_path):
-        """
-        Đọc file và trả về danh sách các dòng thô.
-        Nếu file không tồn tại thì trả về list rỗng [].
-        """
         if not os.path.exists(file_path):
             return []
 

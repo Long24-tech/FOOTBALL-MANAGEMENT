@@ -6,10 +6,12 @@ class FieldManager:
 
     def add_field(self, field_id, name, location, size, hourly_rate):
         field_id = field_id.upper()
+        name_check = name.upper()
         for san in self._fields:
             if san._field_id == field_id:
                 raise ValueError(f"Mã sân '{field_id}' đã tồn tại! Vui lòng nhập mã khác.")
-
+            if san._name.upper() == name_check:
+                raise ValueError(f"Tên sân '{name}' đã tồn tại trong hệ thống! Vui lòng nhập tên khác.")
         new_field = field(field_id, name, location, size, hourly_rate)
         self._fields.append(new_field)
         return True

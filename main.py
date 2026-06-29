@@ -6,7 +6,6 @@ from services.booking_manager import BookingManager
 from utils.Validator import Validator
 from utils.file_handler import FileHandler
 
-
 def hien_thi_menu():
     print("\n" + "=" * 45)
     print("HỆ THỐNG QUẢN LÝ SÂN BÓNG ĐÁ MINI")
@@ -18,7 +17,6 @@ def hien_thi_menu():
     print("5. Hủy đơn đặt sân")
     print("0. Lưu dữ liệu & Thoát chương trình")
     print("=" * 45)
-
 
 def main():
     field_sys = FieldManager()
@@ -56,11 +54,11 @@ def main():
             try:
                 f_id = Validator.validate_id(input("Nhập mã sân (VD: S01): "), "Mã sân")
                 name = Validator.validate_non_empty(input("Nhập tên sân: "), "Tên sân")
-                loc = Validator.validate_non_empty(input("Nhập khu vực (VD: Khu A): "), "Khu vực")
+                filter = Validator.validate_location(input("Nhập khu vực (A/B/C/D/E): "))
                 size = Validator.validate_size(input("Nhập sức chứa (số người): "))
                 price = Validator.validate_price(input("Nhập giá thuê/giờ: "))
 
-                field_sys.add_field(f_id, name, loc, size, price)
+                field_sys.add_field(f_id, name, filter, size, price)
                 print(f"✅ Đã thêm sân '{name}' thành công!")
                 FileHandler.save_to_file("data/fields.txt", field_sys._fields)
                 print("💾 [Auto-Save] Dữ liệu ổ cứng đã được cập nhật!")
@@ -106,7 +104,7 @@ def main():
             FileHandler.save_to_file("data/bookings.txt", booking_sys.bookings)
 
             print("💾 Đã tự động lưu toàn bộ dữ liệu an toàn vào thư mục 'data/'.")
-            print("👋 Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")
+            """print("👋 Cảm ơn bạn đã sử dụng hệ thống. Tạm biệt!")"""
             break
 
         else:

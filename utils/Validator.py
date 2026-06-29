@@ -6,7 +6,6 @@ Use this file with menu.py and booking_manager.py.
 """
 
 from __future__ import annotations
-
 from datetime import date, datetime
 
 
@@ -99,9 +98,20 @@ class Validator:
         raise ValueError("Please enter y/n.")
 
     @staticmethod
-    def validate_id(value: str, field_name: str = "ID") -> str:
-        """Validate general IDs such as field_id and booking_id."""
+    def validate_id(value: str, field_name: str ) -> str:
         text = Validator.validate_non_empty(value, field_name)
+        """check_1 = list(text)
+        if check_1[0].upper() != "S":
+            raise ValueError(f"{field_name} have to contain the letter S at first")"""
         if "|" in text:
             raise ValueError(f"{field_name} cannot contain the '|' character.")
         return text
+
+    @staticmethod
+    def validate_location(value: str) -> str:
+        filter = value.strip().upper()
+        valid_location = ["A", "B", "C", "D", "E"]
+        if filter not in valid_location:
+            raise ValueError(f"Khu vực không hợp lệ! Vui lòng chỉ nhập A, B, C, D hoặc E.")
+
+        return filter
