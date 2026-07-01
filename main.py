@@ -6,6 +6,7 @@ from services.booking_manager import BookingManager
 from utils.Validator import Validator
 from utils.file_handler import FileHandler
 
+
 def hien_thi_menu():
     print("\n" + "=" * 45)
     print("HỆ THỐNG QUẢN LÝ SÂN BÓNG ĐÁ MINI")
@@ -17,6 +18,7 @@ def hien_thi_menu():
     print("5. Hủy đơn đặt sân")
     print("0. Lưu dữ liệu & Thoát chương trình")
     print("=" * 45)
+
 
 def main():
     field_sys = FieldManager()
@@ -36,7 +38,7 @@ def main():
         for line in raw_bookings:
             parts = line.strip().split("|")
             if len(parts) >= 6:
-                b = Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]))
+                b = Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]) , float(parts[6]))
                 booking_sys.bookings.append(b)
 
         print(f"Đã nạp thành công {len(field_sys._fields)} sân bóng và {len(booking_sys.bookings)} hóa đơn!")
@@ -52,16 +54,14 @@ def main():
         if lua_chon == "1":
             print("\n--- CHỨC NĂNG: THÊM SÂN BÓNG MỚI ---")
             try:
-                f_id = Validator.validate_id(input("Nhập mã sân (VD: S01): "), "Mã sân" )
+                f_id = Validator.validate_id(input("Nhập mã sân (VD: S01): "), "Mã sân")
                 name = Validator.validate_non_empty(input("Nhập tên sân: "), "Tên sân")
                 filter = Validator.validate_location(input("Nhập khu vực (A/B/C/D/E): "))
                 size = Validator.validate_size(input("Nhập sức chứa (số người): "))
-                price = Validator.validate_price(input("Nhập giá thuê/giờ (k/h): "))
+                price = Validator.validate_price(input("Nhập giá thuê/giờ: "))
 
                 field_sys.add_field(f_id, name, filter, size, price)
                 print(f"✅ Đã thêm sân '{name}' thành công!")
-                FileHandler.save_to_file("data/fields.txt", field_sys._fields)
-                print("💾 [Auto-Save] Dữ liệu ổ cứng đã được cập nhật!")
             except ValueError as e:
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
@@ -71,8 +71,8 @@ def main():
         elif lua_chon == "3":
             print("\n--- CHỨC NĂNG: ĐẶT LỊCH SÂN BÓNG ---")
             try:
-                b_id = Validator.validate_id(input("Nhập mã hóa đơn (VD: HD01): "), "Mã hóa đơn" )
-                f_id = Validator.validate_id(input("Nhập mã sân muốn đặt: "), "Mã sân" )
+                b_id = Validator.validate_id(input("Nhập mã hóa đơn (VD: HD01): "), "Mã hóa đơn")
+                f_id = Validator.validate_id(input("Nhập mã sân muốn đặt: "), "Mã sân")
                 cust = Validator.validate_non_empty(input("Nhập tên khách hàng: "), "Tên khách hàng")
                 date_val = Validator.validate_date(input("Nhập ngày đặt (YYYY-MM-DD): "))
                 time_val = Validator.validate_time(input("Nhập giờ đặt (HH:MM): "))
@@ -90,7 +90,7 @@ def main():
         elif lua_chon == "5":
             print("\n--- CHỨC NĂNG: HỦY ĐƠN ĐẶT SÂN ---")
             try:
-                b_id = Validator.validate_id(input("Nhập mã hóa đơn cần hủy: "), "Mã hóa đơn" )
+                b_id = Validator.validate_id(input("Nhập mã hóa đơn cần hủy: "), "Mã hóa đơn")
                 thanh_cong = booking_sys.cancel_booking(b_id)
                 if thanh_cong:
                     print("✅ Hủy đơn thành công! Sân đã được giải phóng.")
@@ -109,6 +109,7 @@ def main():
 
         else:
             print("❌ Lựa chọn không hợp lệ. Vui lòng nhập số từ 0 đến 5!")
+
 
 if __name__ == "__main__":
     main()

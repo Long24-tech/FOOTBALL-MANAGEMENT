@@ -1,13 +1,13 @@
 #Thông tin một lượt thuê sân bóng
 class Booking:
-    def __init__(self, booking_id, field_id, customer_name, booking_date, booking_time, hours):
+    def __init__(self, booking_id, field_id, customer_name, booking_date, booking_time, hours ,total_price=0.0 ):
         self._booking_id = booking_id
         self._field_id = field_id
         self._customer_name = customer_name
         self._booking_date = booking_date
         self._booking_time = booking_time
         self.hours = hours
-        self.total_price = 0.0
+        self.total_price = float(total_price)
 
     @property
     def booking_id(self):
