@@ -1,4 +1,4 @@
-from models.field import field
+from models.field import Field
 
 class FieldManager:
     def __init__(self):
@@ -12,7 +12,7 @@ class FieldManager:
                 raise ValueError(f"Mã sân '{field_id}' đã tồn tại! Vui lòng nhập mã khác.")
             if san._name.upper() == name_check:
                 raise ValueError(f"Tên sân '{name}' đã tồn tại trong hệ thống! Vui lòng nhập tên khác.")
-        new_field = field(field_id, name, location, size, hourly_rate)
+        new_field = Field(field_id, name, location, size, hourly_rate)
         self._fields.append(new_field)
         return True
 

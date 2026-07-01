@@ -7,3 +7,6 @@ S02121|dsadsa|G|11|200.0|True
 S019|dlasdsal|G|11|200.0|True
 S0121|dsajodsao|G|11|200.0|True
 S03215|dsada|B|11|200.0|True
+S0321|fsamfsl|A|11|200.0|True
+AAA|dsad|A|11|200.0|False
+!|dsa|A|11|200.0|True

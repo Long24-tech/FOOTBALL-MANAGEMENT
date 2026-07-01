@@ -1,5 +1,5 @@
 # Đóng gói toàn bộ thông tin
-class field:
+class Field:
     def __init__(self, field_id, name, location, size, hourly_rate):
         self._field_id = field_id
         self._name = name

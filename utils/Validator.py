@@ -100,11 +100,8 @@ class Validator:
     @staticmethod
     def validate_id(value: str, field_name: str ) -> str:
         text = Validator.validate_non_empty(value, field_name)
-        """check_1 = list(text)
-        if check_1[0].upper() != "S":
-            raise ValueError(f"{field_name} have to contain the letter S at first")"""
-        if "|" in text:
-            raise ValueError(f"{field_name} cannot contain the '|' character.")
+        if not text.isalnum():
+             raise ValueError(f"{field_name} cannot contain the special character.")
         return text
 
     @staticmethod
