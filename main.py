@@ -37,7 +37,7 @@ def main():
             parts = line.strip().split("|")
             if len(parts) >= 6:
                 b = Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]))
-                booking_sys.Bookings.append(b)
+                booking_sys.bookings.append(b)
 
         print(f"Đã nạp thành công {len(field_sys._fields)} sân bóng và {len(booking_sys.bookings)} hóa đơn!")
     except Exception as e:
@@ -70,19 +70,44 @@ def main():
 
         elif lua_chon == "3":
             print("\n--- CHỨC NĂNG: ĐẶT LỊCH SÂN BÓNG ---")
-            try:
-                b_id = Validator.validate_id(input("Nhập mã hóa đơn (VD: HD01): "), "Mã hóa đơn")
-                f_id = Validator.validate_id(input("Nhập mã sân muốn đặt: "), "Mã sân")
-                cust = Validator.validate_non_empty(input("Nhập tên khách hàng: "), "Tên khách hàng")
-                date_val = Validator.validate_date(input("Nhập ngày đặt (YYYY-MM-DD): "))
-                time_val = Validator.validate_time(input("Nhập giờ đặt (HH:MM): "))
-                hours = Validator.validate_hours(input("Nhập số giờ thuê (0-24): "))
+            
+            # --- VÒNG LẶP 1: CHỈ XỬ LÝ MÃ HÓA ĐƠN ---
+            while True:
+                try:
+                    b_id = Validator.validate_id(input("Nhập mã hóa đơn (VD: HD01): "), "Mã hóa đơn")
+                    
+                    # Giải quyết vấn đề 2: Báo trùng ngay lập tức
+                    if booking_sys.find_booking(b_id) is not None:
+                        print(f"❌ LỖI: Mã hóa đơn '{b_id}' đã tồn tại! Vui lòng nhập mã khác.")
+                        continue # Bắt đầu lại vòng lặp để nhập lại mã
+                    
+                    # Nếu qua được các lỗi trên thì thoát vòng lặp 1 để đi tiếp
+                    break 
+                except ValueError as e:
+                    # Giải quyết vấn đề 1: Báo lỗi ký tự đặc biệt và bắt nhập lại
+                    print(f"❌ LỖI NHẬP LIỆU: {e}. Vui lòng nhập lại!")
 
-                thanh_cong = booking_sys.book_field(b_id, f_id, cust, date_val, time_val, hours)
-                if thanh_cong:
-                    print("✅ Đặt sân thành công! Hãy kiểm tra lại danh sách hóa đơn.")
-            except ValueError as e:
-                print(f"❌ LỖI NHẬP LIỆU: {e}")
+            # --- VÒNG LẶP 2: NHẬP CÁC THÔNG TIN CÒN LẠI ---
+            while True:
+                try:
+                    f_id = Validator.validate_id(input("Nhập mã sân muốn đặt: "), "Mã sân")
+                    cust = Validator.validate_non_empty(input("Nhập tên khách hàng: "), "Tên khách hàng")
+                    date_val = Validator.validate_date(input("Nhập ngày đặt (YYYY-MM-DD): "))
+                    time_val = Validator.validate_time(input("Nhập giờ đặt (HH:MM): "))
+                    hours = Validator.validate_hours(input("Nhập số giờ thuê (0-24): "))
+                    
+                    # Nếu nhập đúng tất cả định dạng, thoát vòng lặp 2
+                    break 
+                except ValueError as e:
+                    print(f"❌ LỖI NHẬP LIỆU: {e}. Vui lòng nhập lại từ phần mã sân!")
+
+            # --- XỬ LÝ LƯU TRỮ ---
+            thanh_cong = booking_sys.book_field(b_id, f_id, cust, date_val, time_val, hours)
+            if thanh_cong:
+                print("✅ Đặt sân thành công! Hãy kiểm tra lại danh sách hóa đơn.")
+                FileHandler.save_to_file("data/bookings.txt", booking_sys.bookings)
+                FileHandler.save_to_file("data/fields.txt", field_sys._fields) 
+                print("💾 [Auto-Save] Dữ liệu hóa đơn đã được cập nhật!")
 
         elif lua_chon == "4":
             booking_sys.display_bookings()
@@ -94,6 +119,9 @@ def main():
                 thanh_cong = booking_sys.cancel_booking(b_id)
                 if thanh_cong:
                     print("✅ Hủy đơn thành công! Sân đã được giải phóng.")
+                    FileHandler.save_to_file("data/bookings.txt", booking_sys.bookings)
+            # Lưu lại file fields vì sân đã được giải phóng (trống)
+                    FileHandler.save_to_file("data/fields.txt", field_sys._fields)
             except ValueError as e:
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
