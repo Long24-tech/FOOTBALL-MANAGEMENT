@@ -17,7 +17,7 @@ class Validator:
         """Return a stripped string if it is not empty."""
         text = str(value).strip()
         if not text:
-            raise ValueError(f"{field_name} cannot be empty.")
+            raise ValueError(f"{field_name} không được bỏ trống.")
         return text
 
     @staticmethod
@@ -26,10 +26,10 @@ class Validator:
         try:
             price = float(value)
         except (TypeError, ValueError):
-            raise ValueError("Price must be a number.")
+            raise ValueError("Giá tiền phải là một định dạng số.")
 
         if price <= 0:
-            raise ValueError("Price must be greater than 0.")
+            raise ValueError("Giá tiền phải lớn hơn 0.")
         return price
 
     @staticmethod
@@ -38,10 +38,10 @@ class Validator:
         try:
             size = int(value)
         except (TypeError, ValueError):
-            raise ValueError("Size must be a number.")
+            raise ValueError("Sức chứa phải là một định dạng số.")
 
         if size <= 0:
-            raise ValueError("Size must be greater than 0.")
+            raise ValueError("Sức chứa phải lớn hơn 0.")
         return size
 
     @staticmethod
@@ -50,12 +50,12 @@ class Validator:
         try:
             hours = float(value)
         except (TypeError, ValueError):
-            raise ValueError("Hours must be a number.")
+            raise ValueError("Số giờ phải là một định dạng số.")
 
         if hours <= 0:
-            raise ValueError("Hours must be greater than 0.")
+            raise ValueError("Số giờ phải lớn hơn 0.")
         if hours > 24:
-            raise ValueError("Hours cannot be greater than 24.")
+            raise ValueError("Số giờ không được vượt quá 24.")
         return hours
 
     @staticmethod
@@ -68,10 +68,10 @@ class Validator:
         try:
             booking_date = datetime.strptime(text, "%Y-%m-%d").date()
         except ValueError:
-            raise ValueError("Date must use format YYYY-MM-DD.")
+            raise ValueError("Ngày phải đúng định dạng YYYY-MM-DD.")
 
         if not allow_past and booking_date < date.today():
-            raise ValueError("Booking date cannot be in the past.")
+            raise ValueError("Ngày đặt lịch không được là ngày trong quá khứ.")
         return booking_date.strftime("%Y-%m-%d")
 
     @staticmethod
@@ -84,7 +84,7 @@ class Validator:
         try:
             booking_time = datetime.strptime(text, "%H:%M").time()
         except ValueError:
-            raise ValueError("Time must use format HH:MM, 24-hour format.")
+            raise ValueError("Giờ phải đúng định dạng HH:MM (hệ 24 giờ).")
         return booking_time.strftime("%H:%M")
 
     @staticmethod
@@ -95,16 +95,13 @@ class Validator:
             return True
         if text in {"n", "no"}:
             return False
-        raise ValueError("Please enter y/n.")
+        raise ValueError("Vui lòng nhập CÓ (y) hoặc KHÔNG (n).")
 
     @staticmethod
     def validate_id(value: str, field_name: str ) -> str:
         text = Validator.validate_non_empty(value, field_name)
-        """check_1 = list(text)
-        if check_1[0].upper() != "S":
-            raise ValueError(f"{field_name} have to contain the letter S at first")"""
-        if "|" in text:
-            raise ValueError(f"{field_name} cannot contain the '|' character.")
+        if not (text.isalnum() and text.isascii()):
+            raise ValueError(f"{field_name} không được chứa ký tự đặc biệt hoặc chữ có dấu.")
         return text
 
     @staticmethod
