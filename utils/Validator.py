@@ -84,7 +84,7 @@ class Validator:
         try:
             booking_time = datetime.strptime(text, "%H:%M").time()
         except ValueError:
-            raise ValueError("Giờ phải đúng định dạng HH:MM (hệ 24 giờ).")
+            raise ValueError("Giờ phải đúng định dạng HH:MM (hệ 24 giờ, từ 00:00 đến 23:59).")
         return booking_time.strftime("%H:%M")
 
     @staticmethod
