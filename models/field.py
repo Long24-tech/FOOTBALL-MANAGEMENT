@@ -1,4 +1,4 @@
-# Đóng gói toàn bộ thông tin
+    # Đóng gói toàn bộ thông tin
 class Field:
     def __init__(self, field_id, name, location, size, hourly_rate):
         self._field_id = field_id
@@ -28,6 +28,12 @@ class Field:
     @property
     def hourly_rate(self): #giá thuê theo giờ
         return self._hourly_rate
+
+    @hourly_rate.setter
+    def hourly_rate(self, value):
+        if value <= 0:
+            raise ValueError("Giá thuê phải lớn hơn 0!")
+        self._hourly_rate = value
 
     @property
     def is_available(self): #True là trống, False là bj đặt

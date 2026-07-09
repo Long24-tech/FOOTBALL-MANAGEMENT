@@ -8,9 +8,9 @@ class FieldManager:
         field_id = field_id.upper()
         name_check = name.upper()
         for san in self._fields:
-            if san._field_id == field_id:
+            if san.field_id == field_id:
                 raise ValueError(f"Mã sân '{field_id}' đã tồn tại! Vui lòng nhập mã khác.")
-            if san._name.upper() == name_check:
+            if san.name.upper() == name_check:
                 raise ValueError(f"Tên sân '{name}' đã tồn tại trong hệ thống! Vui lòng nhập tên khác.")
         new_field = Field(field_id, name, location, size, hourly_rate)
         self._fields.append(new_field)
@@ -27,15 +27,15 @@ class FieldManager:
 
     def find_field_by_id(self, field_id): #tìm kiếm sân theo mã sân
         for f in self._fields:
-            if f._field_id == field_id:
+            if f.field_id == field_id:
                 return f
         return None
 
     def update_field_price(self, field_id, new_price): #update new price nếu có
         f = self.find_field_by_id(field_id)
         if f:
-            f._hourly_rate = new_price
-            print(f"Đã cập nhật giá mới cho sân {field_id} thành {new_price}k/h.")
+            f.hourly_rate = new_price
+            print(f"Đã cập nhật giá mới cho sân {field_id   } thành {new_price}k/h.")
             return True
         print(f"Không tìm thấy mã sân {field_id} để sửa giá.")
         return False
