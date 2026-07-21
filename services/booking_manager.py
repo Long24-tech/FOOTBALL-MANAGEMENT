@@ -1,50 +1,50 @@
 from models.booking import Booking
 
 class BookingManager:
-    def __init__(self, field_manager_cua_he_thong):
+    def __init__(self, field_manager):
         self.bookings = []
-        self.field_manager = field_manager_cua_he_thong
+        self._field_manager = field_manager
 
-    def book_field(self, ma_don, ma_san, ten_khach_hang, ngay_dat, gio_dat, so_gio):
-        san_can_thue = self.field_manager.find_field_by_id(ma_san)
-        if self.find_booking(ma_don) is not None:
-            print(f"LỖI: Mã hóa đơn '{ma_don}' đã tồn tại! Vui lòng sử dụng mã khác.")
+    def book_field(self, booking_id, field_id, customer_name, booking_date, booking_time, hours):
+        field_to_book = self._field_manager.find_field_by_id(field_id)
+        if self.find_booking(booking_id) is not None:
+            print(f"LỖI: Mã hóa đơn '{booking_id}' đã tồn tại! Vui lòng sử dụng mã khác.")
             return False
 
-        if san_can_thue is None:
-            print(f"LỖI: Sân bóng mang mã '{ma_san}' không tồn tại trong hệ thống!")
+        if field_to_book is None:
+            print(f"LỖI: Sân bóng mang mã '{field_id}' không tồn tại trong hệ thống!")
             return False
 
-        if san_can_thue.is_available == False:
-            print(f"LỖI: Sân '{ma_san}' đã có người thuê. Vui lòng chọn sân khác!")
+        if field_to_book.is_available == False:
+            print(f"LỖI: Sân '{field_id}' đã có người thuê. Vui lòng chọn sân khác!")
             return False
 
-        don_moi = Booking(ma_don, ma_san, ten_khach_hang, ngay_dat, gio_dat, so_gio)
+        new_booking = Booking(booking_id, field_id, customer_name, booking_date, booking_time, hours)
 
-        gia_cua_san = san_can_thue.hourly_rate
-        don_moi.calculate_total(gia_cua_san)
+        field_hourly_rate = field_to_book.hourly_rate
+        new_booking.calculate_total(field_hourly_rate)
 
-        self.bookings.append(don_moi)
-        san_can_thue.book_field()
+        self.bookings.append(new_booking)
+        field_to_book.book_field()
 
         print("ĐẶT SÂN THÀNH CÔNG! Hóa đơn chi tiết:")
-        print(don_moi)
+        print(new_booking)
         return True
 
-    def cancel_booking(self, ma_don_can_huy):
-        for don in self.bookings:
-            if don.booking_id == ma_don_can_huy:
-                ma_san = don.field_id
-                san_dang_thue = self.field_manager.find_field_by_id(ma_san)
+    def cancel_booking(self, booking_id_to_cancel):
+        for booking in self.bookings:
+            if booking.booking_id == booking_id_to_cancel:
+                field_id = booking.field_id
+                field_being_released = self._field_manager.find_field_by_id(field_id)
 
-                if san_dang_thue is not None:
-                    san_dang_thue.release_field()
+                if field_being_released is not None:
+                    field_being_released.release_field()
 
-                self.bookings.remove(don)
-                print(f"Đã hủy thành công đơn {ma_don_can_huy}. Sân {ma_san} đã trống.")
+                self.bookings.remove(booking)
+                print(f"Đã hủy thành công đơn {booking_id_to_cancel}. Sân {field_id} đã trống.")
                 return True
 
-        print(f"LỖI: Không tìm thấy đơn đặt sân nào có mã '{ma_don_can_huy}'.")
+        print(f"LỖI: Không tìm thấy đơn đặt sân nào có mã '{booking_id_to_cancel}'.")
         return False
 
     def display_bookings(self):
@@ -53,11 +53,11 @@ class BookingManager:
             return
 
         print("--- DANH SÁCH ĐƠN ĐẶT SÂN ---")
-        for don in self.bookings:
-            print(don)
+        for booking in self.bookings:
+            print(booking)
 
-    def find_booking(self, ma_don_can_tim):
-        for don in self.bookings:
-            if don.booking_id == ma_don_can_tim:
-                return don
+    def find_booking(self, booking_id_to_find):
+        for booking in self.bookings:
+            if booking.booking_id == booking_id_to_find:
+                return booking
         return None
