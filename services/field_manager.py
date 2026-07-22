@@ -4,6 +4,15 @@ class FieldManager:
     def __init__(self):
         self._fields = []
 
+    @property
+    def fields(self):
+        """Cho phép bên ngoài đọc danh sách sân bóng (chỉ read-only)"""
+        return self._fields
+
+    def import_field(self, field):
+        """Phương thức an toàn để nạp dữ liệu từ file vào hệ thống"""
+        self._fields.append(field)
+
     def add_field(self, field_id, name, location, size, hourly_rate):
         field_id = field_id.upper()
         name_check = name.upper()
@@ -16,15 +25,6 @@ class FieldManager:
         self._fields.append(new_field)
         return True
 
-    def display_fields(self):
-        if not self._fields:
-            print("Danh sách sân bóng hiện đang trống!")
-            return
-
-        print("\n--- DANH SÁCH SÂN BÓNG HIỆN CÓ ---")
-        for f in self._fields:
-            print(f)
-
     def find_field_by_id(self, field_id): #tìm kiếm sân theo mã sân
         for f in self._fields:
             if f.field_id == field_id:
@@ -33,19 +33,14 @@ class FieldManager:
 
     def update_field_price(self, field_id, new_price): #update new price nếu có
         f = self.find_field_by_id(field_id)
-        if f:
-            f.hourly_rate = new_price
-            print(f"Đã cập nhật giá mới cho sân {field_id   } thành {new_price}k/h.")
-            return True
-        print(f"Không tìm thấy mã sân {field_id} để sửa giá.")
-        return False
+        if not f:
+            raise ValueError(f"Không tìm thấy mã sân {field_id} để sửa giá.")
+        f.hourly_rate = new_price
+        return True
 
     def delete_field(self, field_id):
         f = self.find_field_by_id(field_id)
-        if f:
-            self._fields.remove(f)
-            print(f"Đã xóa sân {field_id} khỏi hệ thống.")
-            return True
-        print(f"Không tìm thấy mã sân {field_id} để xóa.")
-        return False
-
+        if not f:
+            raise ValueError(f"Không tìm thấy mã sân {field_id} để xóa.")
+        self._fields.remove(f)
+        return True
