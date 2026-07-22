@@ -28,20 +28,17 @@ def main():
     try:
         raw_fields_data = FileHandler.load_from_file("data/fields.txt")
         for line in raw_fields_data:
-            parts = line.strip().split("|")
-            if len(parts) >= 6:
-                field = Field(parts[0], parts[1], parts[2], int(parts[3]), float(parts[4]))
-                field._is_available = (parts[5] == "True")
-                field_manager._fields.append(field)
+            field = Field.from_file_string(line) # Vẫn gọi như thế này
+            if field:
+                field_manager.import_field(field)
 
         raw_bookings_data = FileHandler.load_from_file("data/bookings.txt")
         for line in raw_bookings_data:
-            parts = line.strip().split("|")
-            if len(parts) >= 7:
-                booking = Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]), float(parts[6]))
-                booking_manager.bookings.append(booking)
-
-        print(f"Đã nạp thành công {len(field_manager._fields)} sân bóng và {len(booking_manager.bookings)} hóa đơn!")
+            booking = Booking.from_file_string(line) # Vẫn gọi như thế này
+            if booking:
+                booking_manager.import_booking(booking)
+                
+        print(f"Đã nạp thành công {len(field_manager.fields)} sân bóng và {len(booking_manager.bookings)} hóa đơn!")
     except Exception as e:
         print(f"Dữ liệu trống hoặc có lỗi khi nạp file: {e}")
 
@@ -66,7 +63,14 @@ def main():
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
         elif choice == "2":
-            field_manager.display_fields()
+            # Tự in danh sách sân bóng
+            danh_sach_san = field_manager.fields
+            if not danh_sach_san:
+                print("Danh sách sân bóng hiện đang trống!")
+            else:
+                print("\n--- DANH SÁCH SÂN BÓNG HIỆN CÓ ---")
+                for f in danh_sach_san:
+                    print(f)
 
         elif choice == "3":
             print("\n--- CHỨC NĂNG: ĐẶT LỊCH SÂN BÓNG ---")
@@ -79,27 +83,33 @@ def main():
                 booking_hours = Validator.validate_hours(input("Nhập số giờ thuê (0-24): "))
 
                 success = booking_manager.book_field(booking_id, field_id, customer_name, booking_date, booking_time, booking_hours)
-                if success:
-                    print("✅ Đặt sân thành công! Hãy kiểm tra lại danh sách hóa đơn.")
+                print("✅ ĐẶT SÂN THÀNH CÔNG! Hóa đơn chi tiết:")
+                print(success)
             except ValueError as e:
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
         elif choice == "4":
-            booking_manager.display_bookings()
+            # Tự in danh sách hóa đơn
+            danh_sach_don = booking_manager.bookings
+            if not danh_sach_don:
+                print("Hiện tại chưa có đơn đặt sân nào.")
+            else:
+                print("\n--- DANH SÁCH ĐƠN ĐẶT SÂN ---")
+                for don in danh_sach_don:
+                    print(don)
 
         elif choice == "5":
             print("\n--- CHỨC NĂNG: HỦY ĐƠN ĐẶT SÂN ---")
             try:
                 booking_id = Validator.validate_id(input("Nhập mã hóa đơn cần hủy: "), "Mã hóa đơn")
-                success = booking_manager.cancel_booking(booking_id)
-                if success:
-                    print("✅ Hủy đơn thành công! Sân đã được giải phóng.")
+                finish_delete = booking_manager.cancel_booking(booking_id)
+                print(f"✅ Hủy đơn thành công! Sân '{finish_delete}' đã được giải phóng.")
             except ValueError as e:
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
         elif choice == "0":
             print("\nĐang tiến hành lưu trữ dữ liệu...")
-            FileHandler.save_to_file("data/fields.txt", field_manager._fields)
+            FileHandler.save_to_file("data/fields.txt", field_manager.fields)
             FileHandler.save_to_file("data/bookings.txt", booking_manager.bookings)
             print("💾 Đã lưu toàn bộ dữ liệu an toàn vào thư mục 'data/'.")
             break
