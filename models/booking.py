@@ -8,6 +8,15 @@ class Booking:
         self._booking_time = booking_time
         self.hours = hours
         self.total_price = float(total_price)
+        
+    @staticmethod
+    def from_file_string(line):
+        """Hàm tĩnh phân tích chuỗi và trả về đối tượng Booking"""
+        parts = line.strip().split("|")
+        if len(parts) >= 7:
+            # Gọi trực tiếp tên class là Booking
+            return Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]), float(parts[6]))
+        return None
 
     @property
     def booking_id(self):
@@ -34,20 +43,20 @@ class Booking:
         return self._hours
 
     @hours.setter
-    def hours(self, gia_tri_moi):
-        if gia_tri_moi <= 0:
+    def hours(self, new_value):
+        if new_value <= 0:
             raise ValueError("LỖI: Thời lượng thuê sân phải lớn hơn 0!")
-        self._hours = gia_tri_moi
+        self._hours = new_value
 
     @property
     def total_price(self):
         return self._total_price
 
     @total_price.setter
-    def total_price(self, gia_tri_moi):
-        if gia_tri_moi < 0:
+    def total_price(self, new_value):
+        if new_value < 0:
             raise ValueError("LỖI: Tổng tiền không được phép là số âm!")
-        self._total_price = gia_tri_moi
+        self._total_price = new_value
 
     def calculate_total(self, hourly_rate):
         self.total_price = self._hours * hourly_rate
