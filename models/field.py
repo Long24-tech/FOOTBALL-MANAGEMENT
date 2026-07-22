@@ -1,12 +1,22 @@
     # Đóng gói toàn bộ thông tin
 class Field:
-    def __init__(self, field_id, name, location, size, hourly_rate):
+    def __init__(self, field_id, name, location, size, hourly_rate, is_available=True):
         self._field_id = field_id
         self._name = name
         self._location = location
         self._size = size
         self._hourly_rate = hourly_rate
-        self._is_available = True  #Mới tạo để trống
+        self._is_available = is_available
+    
+    @staticmethod
+    def from_file_string(line):
+        """Hàm tĩnh phân tích chuỗi và trả về đối tượng Field"""
+        parts = line.strip().split("|")
+        if len(parts) >= 6:
+            is_available = (parts[5] == "True")
+            # Gọi trực tiếp tên class là Field thay vì dùng cls
+            return Field(parts[0], parts[1], parts[2], int(parts[3]), float(parts[4]), is_available)
+        return None
 
     # CÁC HÀM GETTER (@property) - Cho phép xem dữ liệu, cấm tự ý sửa bừa
     @property
