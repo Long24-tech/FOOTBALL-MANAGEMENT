@@ -1,11 +1,10 @@
-    # Đóng gói toàn bộ thông tin
 class Field:
     def __init__(self, field_id, name, location, size, hourly_rate, is_available=True):
         self._field_id = field_id
         self._name = name
         self._location = location
         self._size = size
-        self._hourly_rate = hourly_rate
+        self.hourly_rate = hourly_rate
         self._is_available = is_available
     
     @staticmethod
@@ -14,17 +13,15 @@ class Field:
         parts = line.strip().split("|")
         if len(parts) >= 6:
             is_available = (parts[5] == "True")
-            # Gọi trực tiếp tên class là Field thay vì dùng cls
             return Field(parts[0], parts[1], parts[2], int(parts[3]), float(parts[4]), is_available)
         return None
 
-    # CÁC HÀM GETTER (@property) - Cho phép xem dữ liệu, cấm tự ý sửa bừa
     @property
     def field_id(self):
         return self._field_id
 
     @property
-    def name(self): #tên sân
+    def name(self): 
         return self._name
 
     @property
@@ -36,7 +33,7 @@ class Field:
         return self._size
 
     @property
-    def hourly_rate(self): #giá thuê theo giờ
+    def hourly_rate(self):
         return self._hourly_rate
 
     @hourly_rate.setter
@@ -46,7 +43,7 @@ class Field:
         self._hourly_rate = value
 
     @property
-    def is_available(self): #True là trống, False là bj đặt
+    def is_available(self):
         return self._is_available
 
     def book_field(self):

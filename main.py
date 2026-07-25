@@ -28,13 +28,13 @@ def main():
     try:
         raw_fields_data = FileHandler.load_from_file("data/fields.txt")
         for line in raw_fields_data:
-            field = Field.from_file_string(line) # Vẫn gọi như thế này
+            field = Field.from_file_string(line) 
             if field:
                 field_manager.import_field(field)
 
         raw_bookings_data = FileHandler.load_from_file("data/bookings.txt")
         for line in raw_bookings_data:
-            booking = Booking.from_file_string(line) # Vẫn gọi như thế này
+            booking = Booking.from_file_string(line) 
             if booking:
                 booking_manager.import_booking(booking)
                 
@@ -63,7 +63,6 @@ def main():
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
         elif choice == "2":
-            # Tự in danh sách sân bóng
             danh_sach_san = field_manager.fields
             if not danh_sach_san:
                 print("Danh sách sân bóng hiện đang trống!")
@@ -89,7 +88,6 @@ def main():
                 print(f"❌ LỖI NHẬP LIỆU: {e}")
 
         elif choice == "4":
-            # Tự in danh sách hóa đơn
             danh_sach_don = booking_manager.bookings
             if not danh_sach_don:
                 print("Hiện tại chưa có đơn đặt sân nào.")

@@ -25,13 +25,13 @@ class FieldManager:
         self._fields.append(new_field)
         return True
 
-    def find_field_by_id(self, field_id): #tìm kiếm sân theo mã sân
+    def find_field_by_id(self, field_id):
         for f in self._fields:
             if f.field_id == field_id:
                 return f
         return None
 
-    def update_field_price(self, field_id, new_price): #update new price nếu có
+    def update_field_price(self, field_id, new_price):
         f = self.find_field_by_id(field_id)
         if not f:
             raise ValueError(f"Không tìm thấy mã sân {field_id} để sửa giá.")

@@ -8,11 +8,9 @@ class FileHandler:
 
         with open(file_path, "w", encoding="utf-8") as file:
             for item in data_list:
-                # Nếu là object có to_file_string() thì dùng hàm đó
                 if hasattr(item, "to_file_string"):
                     line = item.to_file_string()
                 else:
-                    # Nếu lỡ truyền chuỗi thô thì ghi trực tiếp
                     line = str(item)
 
                 file.write(line.strip() + "\n")
@@ -26,7 +24,7 @@ class FileHandler:
         with open(file_path, "r", encoding="utf-8") as file:
             for line in file:
                 cleaned_line = line.strip()
-                if cleaned_line:  # bỏ qua dòng rỗng
+                if cleaned_line:
                     result.append(cleaned_line)
 
         return result

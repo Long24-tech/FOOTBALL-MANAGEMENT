@@ -14,7 +14,6 @@ class Booking:
         """Hàm tĩnh phân tích chuỗi và trả về đối tượng Booking"""
         parts = line.strip().split("|")
         if len(parts) >= 7:
-            # Gọi trực tiếp tên class là Booking
             return Booking(parts[0], parts[1], parts[2], parts[3], parts[4], float(parts[5]), float(parts[6]))
         return None
 
